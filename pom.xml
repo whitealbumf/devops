@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.7.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.test</groupId>
+    <artifactId>test</artifactId>
+    <version>v1.0</version>
+    <name>Test</name>
+    <description>TestProject</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <docker.repository.address>10.1.161.30:10014</docker.repository.address>
+        <docker.repository.username>admin</docker.repository.username>
+        <docker.repository.password>123456</docker.repository.password>
+        <docker.registry.name>library</docker.registry.name>
+        <docker.maven.plugin.version>0.40.1</docker.maven.plugin.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- docker maven plugin -->
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker.maven.plugin.version}</version>
+                <configuration>
+                    <!-- 远程docker服务配置 也可在环境变量中配置DOCKER_HOST 方便通用-->
+                    <!--<dockerHost>tcp://10.1.161.30:2375</dockerHost>-->
+                    <!-- 仓库认证配置 -->
+                    <authConfig>
+                        <username>${docker.repository.username}</username>
+                        <password>${docker.repository.password}</password>
+                    </authConfig>
+                    <!-- 镜像配置 -->
+                    <images>
+                        <image>
+                            <name>${docker.repository.address}/${docker.registry.name}/${project.artifactId}:${project.version}</name>
+                            <registry>${docker.repository.address}</registry>
+                            <build>
+                                <dockerFile>${project.basedir}/Dockerfile</dockerFile>
+                            </build>
+                        </image>
+                    </images>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

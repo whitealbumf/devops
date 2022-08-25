@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: java-app
+
+---
+apiVersion: apps/v1  #kubectl api-versions 可以通过这条指令去看版本信息
+kind: Deployment # 指定资源类别
+metadata: #资源的一些元数据
+  name: java-app #deloyment的名称
+  namespace: java-app
+  labels:
+    app: java-app  #标签
+spec:
+  replicas: 2 #创建pod的个数
+  selector:
+    matchLabels: 
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+    spec:
+      containers:
+      - name: java-app
+        image: 10.1.161.30:10014/library/test:<build_tag>
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-app
+  namespace: java-app
+  labels:
+    app: java-app
+spec: 
+  ports:
+  - appProtocol: http
+    name: http
+    port: 8080
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: java-app
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: java-app
+  namespace: java-app
+  labels:
+    app: java-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  # 可选的 host。在此示例中，未指定 host，因此该规则适用于通过指定 IP 地址的所有入站 HTTP 通信。 如果提供了 host（例如 foo.bar.com），则 rules 适用于该 host。
+  # Ingress 对象的命名必须是合法的 DNS 子域名名称。不能是IP地址
+  # - host: k8s.app.com
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: java-app
+            port:
+              number: 8080
