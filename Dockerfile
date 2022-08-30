@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM java:8
+FROM 10.1.161.30:10014/library/java:8
 
 # 声明容器对外提供的访问端口
 #EXPOSE 9090

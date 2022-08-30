@@ -12,7 +12,7 @@ metadata: #资源的一些元数据
   labels:
     app: java-app  #标签
 spec:
-  replicas: 2 #创建pod的个数
+  replicas: 1 #创建pod的个数
   selector:
     matchLabels: 
       app: java-app
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: java-app
-        image: 10.1.161.30:10014/library/test:<build_tag>
+        image: 10.1.161.30:10014/library/app:<build_tag>
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -66,7 +66,7 @@ spec:
   # - host: k8s.app.com
   - http:
       paths:
-      - path: /
+      - path: /app
         pathType: Prefix
         backend:
           service: 
