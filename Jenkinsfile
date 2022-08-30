@@ -45,8 +45,10 @@ pipeline {
         stage('deploy') {
             steps {
                 echo "5.deploy stage"
-                if (env.BRANCH_NAME == 'master') {
-                    input "确认要部署线上环境吗？"
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        input "确认要部署线上环境吗？"
+                    }
                 }
                 sh "sed -i 's#<build_tag>#${build_tag}#g' deploy.yaml"
                 sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
