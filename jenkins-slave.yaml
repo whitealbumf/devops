@@ -4,8 +4,8 @@ metadata:
 spec:
   containers:
   - name: jnlp
-    image: jenkins/jnlp-agent-maven:latest
-    imagePullPolicy: Always
+    image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
+    imagePullPolicy: ifNotPresent
     env:
       - name: TZ
         value: Asia/Shanghai
