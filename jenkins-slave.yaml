@@ -5,7 +5,7 @@ spec:
   containers:
   - name: jnlp
     image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
-    imagePullPolicy: ifNotPresent
+    imagePullPolicy: IfNotPresent
     env:
       - name: TZ
         value: Asia/Shanghai
