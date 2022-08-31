@@ -1,0 +1,29 @@
+kind: Pod
+metadata:
+  name: jenkins-slave
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/jnlp-agent-maven:latest
+    imagePullPolicy: Always
+    env:
+      - name: TZ
+        value: Asia/Shanghai
+    volumeMounts:
+      - name: docker-sh
+        mountPath: /usr/bin/docker
+      - name: docker-sock
+        mountPath: /var/run/docker.sock
+      - name: maven-cache
+        mountPath: /root/.m2
+  volumes:
+    - name: docker-sh
+      hostPath:
+        path: /usr/bin/docker
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+    - name: maven-cache
+      nfs:
+        server: 10.1.161.30
+        path: /nfs/maven/repository

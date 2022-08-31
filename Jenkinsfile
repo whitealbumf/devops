@@ -1,5 +1,11 @@
 pipeline {
-    agent kubernetes
+    agent {
+        kubernetes {
+            cloud "kubernetes"
+            inheritFrom "jenkins-slave"
+            yamlFile "jenkins-slave.yaml"
+        }
+    }
 
     stages {
         stage('prepare') {
@@ -52,7 +58,7 @@ pipeline {
                 }
                 sh "sed -i 's#<build_tag>#${build_tag}#g' deploy.yaml"
                 sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
-                sh "kubectl apply -f deploy.yaml --record"
+                sh "kubectl apply -f deploy.yaml --kubeconfig=admin.kubeconfig --record"
             }
         }
     }
