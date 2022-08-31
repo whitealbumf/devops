@@ -1,3 +1,8 @@
+def registry = "10.48.14.50:8888"
+def project = "library"
+def app_name = "app"
+def app_image = "${registry}/${project}/${app_name}:${build_tag}"
+
 pipeline {
     agent {
         kubernetes {
@@ -32,7 +37,7 @@ pipeline {
         stage('build') {
             steps {
                 echo "3.build docker image stage"
-                sh "docker build -t 10.1.161.30:10014/library/app:${build_tag} ."
+                sh "docker build -t ${app_image} ."
             }
         }
 
@@ -41,8 +46,8 @@ pipeline {
             steps {
                 echo "4.push docker image stage"
                 withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'harborUser', passwordVariable: 'harborPassword')]) {
-                    sh "docker login 10.1.161.30:10014 -u ${harborUser} -p ${harborPassword}"
-                    sh "docker push 10.1.161.30:10014/library/app:${build_tag}"
+                    sh "docker login ${registry} -u ${harborUser} -p ${harborPassword}"
+                    sh "docker push ${app_image}"
                 }
             }
         }
@@ -56,8 +61,8 @@ pipeline {
                         input "确认要部署线上环境吗？"
                     }
                 }
-                sh "sed -i 's#<build_tag>#${build_tag}#g' deploy.yaml"
-                sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
+                sh "sed -i 's#<app_image>#${app_image}#g' deploy.yaml"
+                //sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
                 sh "kubectl apply -f deploy.yaml --kubeconfig=admin.kubeconfig --record"
             }
         }

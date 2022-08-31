@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: java-app
-        image: 10.1.161.30:10014/library/app:<build_tag>
+        image: <app_image>
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
