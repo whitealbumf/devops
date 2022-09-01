@@ -9,9 +9,6 @@ spec:
   - name: jnlp
     image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
     imagePullPolicy: IfNotPresent
-    env:
-      - name: TZ
-        value: Asia/Shanghai
     volumeMounts:
       - name: docker-sh
         mountPath: /usr/bin/docker
