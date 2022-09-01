@@ -1,7 +1,10 @@
+apiVersion: v1
 kind: Pod
 metadata:
   name: jenkins-slave
+  namespace: jenkins
 spec:
+  serviceAccount: jenkins-admin
   containers:
   - name: jnlp
     image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
