@@ -14,6 +14,8 @@ spec:
         mountPath: /usr/bin/docker
       - name: docker-sock
         mountPath: /var/run/docker.sock
+      - name: docker-daemon
+        mountPath: /etc/docker/daemon.json
       - name: maven-cache
         mountPath: /root/.m2
   volumes:
@@ -23,6 +25,9 @@ spec:
     - name: docker-sock
       hostPath:
         path: /var/run/docker.sock
+    - name: docker-daemon
+      hostPath:
+        path: /etc/docker/daemon.json
     - name: maven-cache
       nfs:
         server: 10.1.161.30
