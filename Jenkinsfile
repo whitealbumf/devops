@@ -34,19 +34,12 @@ pipeline {
         }
 
 
-        stage('build') {
+        stage('build and push') {
             steps {
-                echo "3.build docker image stage"
-                sh "docker build -t ${app_image} ."
-            }
-        }
-
-
-        stage('push') {
-            steps {
-                echo "4.push docker image stage"
+                echo "3.build and push docker image stage"
                 withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'harborUser', passwordVariable: 'harborPassword')]) {
                     sh "docker login ${registry} -u ${harborUser} -p ${harborPassword}"
+                    sh "docker build -t ${app_image} ."
                     sh "docker push ${app_image}"
                 }
             }
