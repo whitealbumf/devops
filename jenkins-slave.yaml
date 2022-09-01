@@ -7,7 +7,7 @@ spec:
   serviceAccount: jenkins-admin
   containers:
   - name: jnlp
-    image: 10.1.161.30:10014/library/jnlp-agent-maven@sha256:fc9680ceeb6eb1213e8e14e564ea574cde207a69813c49275365548af1cdb109
+    image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
     imagePullPolicy: IfNotPresent
     env:
       - name: TZ
