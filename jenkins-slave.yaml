@@ -7,7 +7,7 @@ spec:
   serviceAccount: jenkins-admin
   containers:
   - name: jnlp
-    image: 10.1.161.30:10014/library/jnlp-agent-maven:latest
+    image: jenkins/jnlp-agent-maven:jdk11
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - name: docker-sh
