@@ -1,4 +1,4 @@
-def registry = "10.48.14.50:8888"
+def registry = "10.1.161.30:10014"
 def project = "library"
 def app_name = "app"
 def app_image = "${registry}/${project}/${app_name}:${build_tag}"
