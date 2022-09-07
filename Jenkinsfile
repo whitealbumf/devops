@@ -56,6 +56,7 @@ pipeline {
                 }
                 sh "sed -i 's#<app_image>#${app_image}#g' deploy.yaml"
                 //sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
+                sh "echo export KUBECONFIG=/etc/kubernetes/admin.conf >> /etc/profile"
                 sh "kubectl apply -f deploy.yaml --record"
             }
         }
