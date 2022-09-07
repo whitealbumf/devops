@@ -40,5 +40,5 @@ spec:
       hostPath:
         path: /usr/bin/kubectl
     - name: kubectl-config
-          hostPath:
-            path: /etc/kubernetes/admin.conf
+      hostPath:
+        path: /etc/kubernetes/admin.conf
