@@ -10,7 +10,7 @@ spec:
     image: jenkins/jnlp-agent-maven:jdk11
     imagePullPolicy: IfNotPresent
     volumeMounts:
-      - name: docker-sh
+      - name: docker-bin
         mountPath: /usr/bin/docker
       - name: docker-sock
         mountPath: /var/run/docker.sock
@@ -18,8 +18,12 @@ spec:
         mountPath: /etc/docker/daemon.json
       - name: maven-cache
         mountPath: /root/.m2
+      - name: kubectl-bin
+        mountPath: /usr/bin/kubectl
+      - name: kubectl-config
+        mountPath: /etc/kubernetes/admin.conf
   volumes:
-    - name: docker-sh
+    - name: docker-bin
       hostPath:
         path: /usr/bin/docker
     - name: docker-sock
@@ -32,3 +36,9 @@ spec:
       nfs:
         server: 10.1.161.30
         path: /nfs/maven/repository
+    - name: kubectl-bin
+      hostPath:
+        path: /usr/bin/kubectl
+    - name: kubectl-config
+          hostPath:
+            path: /etc/kubernetes/admin.conf
