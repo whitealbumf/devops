@@ -34,6 +34,13 @@ pipeline {
         }
 
 
+        stage('package') {
+                    steps {
+                        echo "mvn clean package -Dmaven.test.skip=true"
+                    }
+                }
+
+
         stage('build and push') {
             steps {
                 echo "3.build and push docker image stage"
