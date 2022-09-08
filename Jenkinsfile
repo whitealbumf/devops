@@ -62,7 +62,6 @@ pipeline {
                 //sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
                 sh "echo export KUBECONFIG=/etc/kubernetes/admin.conf >> /etc/profile"
                 sh "kubectl apply -f deploy.yaml --record"
-                echo "docker system and images clean"
                 sh "docker system prune"
             }
         }
