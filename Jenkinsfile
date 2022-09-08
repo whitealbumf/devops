@@ -64,7 +64,7 @@ pipeline {
                 sh "kubectl apply -f deploy.yaml --record"
                 echo "docker system and images clean"
                 sh "docker system prune"
-                sh "docker rmi $(docker images | grep 10.1.161.30:10014/library/app)"
+                sh 'docker rmi $(docker images | grep 10.1.161.30:10014/library/app)'
             }
         }
     }
