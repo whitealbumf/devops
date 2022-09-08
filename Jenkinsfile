@@ -15,7 +15,6 @@ pipeline {
     stages {
         stage('prepare') {
             steps {
-                echo "1.prepare stage"
                 checkout scm
                 script {
                     build_tag = sh(returnStdout: true, script: 'git rev-parse --short HEAD').trim()
@@ -29,21 +28,20 @@ pipeline {
 
         stage('test') {
             steps {
-                echo "2.test stage"
+                echo "skip test"
             }
         }
 
 
         stage('package') {
                     steps {
-                        echo "mvn clean package -Dmaven.test.skip=true"
+                        sh "mvn clean package -Dmaven.test.skip=true"
                     }
                 }
 
 
         stage('build and push') {
             steps {
-                echo "3.build and push docker image stage"
                 withCredentials([usernamePassword(credentialsId: 'harbor', usernameVariable: 'harborUser', passwordVariable: 'harborPassword')]) {
                     sh "docker login ${registry} -u ${harborUser} -p ${harborPassword}"
                     sh "docker build -t ${app_image} ."
@@ -55,7 +53,6 @@ pipeline {
 
         stage('deploy') {
             steps {
-                echo "5.deploy stage"
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         input "确认要部署线上环境吗？"
@@ -65,6 +62,9 @@ pipeline {
                 //sh "sed -i 's#<BRANCH_NAME>#${env.BRANCH_NAME}#g' deploy.yaml"
                 sh "echo export KUBECONFIG=/etc/kubernetes/admin.conf >> /etc/profile"
                 sh "kubectl apply -f deploy.yaml --record"
+                echo "docker system and images clean"
+                sh "docker system prune"
+                sh "docker rmi $(docker images | grep 10.1.161.30:10014/library/app)"
             }
         }
     }
