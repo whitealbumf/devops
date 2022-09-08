@@ -11,11 +11,11 @@ WORKDIR /app
 #COPY mvnw pom.xml ./
 #RUN ./mvnw dependency:go-offline
 
-ARG JAR_FILE
+#ARG JAR_FILE
 
 #COPY test-v1.0.jar ./java-docker.jar
-
-ADD ${JAR_FILE} ./app.jar
+#ADD ${JAR_FILE} ./app.jar
+#ADD target/test-v1.0.jar ./app.jar
 
 #CMD ["./mvnw", "spring-boot:run"]
 
